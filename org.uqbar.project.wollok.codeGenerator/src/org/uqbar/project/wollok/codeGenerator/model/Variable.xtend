@@ -1,6 +1,8 @@
 package org.uqbar.project.wollok.codeGenerator.model
 
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.project.wollok.codeGenerator.model.types.UnknownType
+import org.uqbar.project.wollok.codeGenerator.model.types.UnionType
 
 @Accessors
 class Variable implements Expression{
@@ -22,7 +24,14 @@ class Variable implements Expression{
 	}
 	
 	override getType() {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		if(assignations.empty)
+			return new UnknownType
+		
+		if(assignations.size == 1){
+			return assignations.get(0).type
+		}
+		
+		return new UnionType(assignations.map[type])
 	}
 	
 	override getContext() {

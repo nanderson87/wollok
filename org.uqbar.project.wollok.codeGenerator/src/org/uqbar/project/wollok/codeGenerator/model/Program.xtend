@@ -6,7 +6,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class Program implements Expression, Context {	
 	val variables = <String, Variable>newLinkedHashMap()
 	val operations = <Expression>newArrayList();
-	val returnVariable = new Variable("_return", null);
+	val returnVariable = new Variable(this, "_return");
 	
 	override getType() {
 		returnVariable.type

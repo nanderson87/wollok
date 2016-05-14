@@ -13,7 +13,7 @@ class Return implements Expression {
 	}
 	
 	override getType() {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		expression.type
 	}
 	
 	override getContext() {

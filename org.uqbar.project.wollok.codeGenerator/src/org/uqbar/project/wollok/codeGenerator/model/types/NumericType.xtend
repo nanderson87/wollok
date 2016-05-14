@@ -1,22 +1,28 @@
 package org.uqbar.project.wollok.codeGenerator.model.types
 
-import org.uqbar.project.wollok.codeGenerator.model.types.Type
+import org.eclipse.xtend.lib.annotations.Accessors
 
-class NumericType implements Type {
-	val NumericTypesEnum realType
+@Accessors
+class NumericType implements NativeType {
+	val NativeTypesEnum nativeType
 	
 	new(Number value){
-		this.realType = typeName(value)
+		this.nativeType = typeName(value)
+	}
+
+	new(NativeTypesEnum nativeType){
+		this.nativeType = nativeType
 	}
 	
-	def dispatch typeName(Double e) { NumericTypesEnum.DOUBLE }
-	def dispatch typeName(Float e) { NumericTypesEnum.DOUBLE }
+	override toString(){
+		nativeType.toString
+	}
+	
+	def dispatch typeName(Double e) { NativeTypesEnum.DOUBLE }
+	def dispatch typeName(Float e) { NativeTypesEnum.DOUBLE }
 
-	def dispatch typeName(Integer e) { NumericTypesEnum.INT }
-	def dispatch typeName(Long e) { NumericTypesEnum.INT }
-	def dispatch typeName(Short e) { NumericTypesEnum.INT }
+	def dispatch typeName(Integer e) { NativeTypesEnum.INT }
+	def dispatch typeName(Long e) { NativeTypesEnum.INT }
+	def dispatch typeName(Short e) { NativeTypesEnum.INT }
 }
 
-enum NumericTypesEnum {
-	DOUBLE, INT
-}

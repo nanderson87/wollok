@@ -1,7 +1,6 @@
 package org.uqbar.project.wollok.codeGenerator
 
 import org.eclipse.emf.ecore.EObject
-import org.uqbar.project.wollok.codeGenerator.model.Context
 import org.uqbar.project.wollok.codeGenerator.model.Expression
 import org.uqbar.project.wollok.codeGenerator.model.MessageSend
 import org.uqbar.project.wollok.codeGenerator.model.NumberLiteral
@@ -36,7 +35,7 @@ class CodeAnalyzer {
 
 	def dispatch Expression analyze(WVariableDeclaration vd, Expression parent) {
 		val v = new Variable(parent, vd.variable.name)
-		vd.right.analyze(v)
+		v.initialValue = vd.right.analyze(v)
 		parent.context.variables.put(v.name, v)
 		v
 	}
@@ -48,15 +47,15 @@ class CodeAnalyzer {
 	}
 
 	def dispatch Expression analyze(WMemberFeatureCall mfc, Expression parent) {
-		val ms = new MessageSend(parent)
-		ms.receiver = mfc.memberCallTarget.analyze(ms)
-		ms.selector = mfc.feature
-		ms.parameters = mfc.memberCallArguments.map[analyze(ms)]
-		ms
+		new MessageSend(parent) => [ ms |
+			ms.receiver = mfc.memberCallTarget.analyze(ms)
+			ms.selector = mfc.feature
+			ms.parameters = mfc.memberCallArguments.map[analyze(ms)]
+		]
 	}
 
 	def dispatch Expression analyze(WVariableReference vr, Expression parent) {
-		new VariableRef(vr.ref.name);
+		new VariableRef(parent, vr.ref.name);
 	}
 
 	def dispatch Expression analyze(WReturnExpression wReturn, Expression parent) {
@@ -68,7 +67,15 @@ class CodeAnalyzer {
 	}
 
 	def dispatch Expression analyze(WBinaryOperation b, Expression parent) {
-		new MessageSend(b.leftOperand.analyze, b.feature, #[b.rightOperand.analyze])
+		new MessageSend(parent) =>[
+			receiver = b.leftOperand.analyze(it)
+			selector = b.feature
+			parameters =  #[b.rightOperand.analyze(it)]
+		]
+	}
+	
+	def performAnalysis(WFile file) {
+		file.analyze(null) as Program
 	}
 
 }
