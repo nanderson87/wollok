@@ -3,6 +3,7 @@ package org.uqbar.project.wollok.codeGenerator.model
 import java.text.NumberFormat
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.project.wollok.codeGenerator.model.types.NumericType
+import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 @Accessors
 class NumberLiteral implements Expression {
@@ -15,11 +16,8 @@ class NumberLiteral implements Expression {
 		this.parent = parent
 	}
 	
-	override getType() {
+	override typeFor(TypeContext tc) {
 		new NumericType(value)
 	}
 	
-	override getContext() {
-		parent.context
-	}
 }

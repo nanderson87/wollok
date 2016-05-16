@@ -1,6 +1,7 @@
 package org.uqbar.project.wollok.codeGenerator.model
 
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 @Accessors
 class Return implements Expression {
@@ -12,11 +13,8 @@ class Return implements Expression {
 		this.parent = parent
 	}
 	
-	override getType() {
-		expression.type
+	override typeFor(TypeContext tc) {
+		expression.typeFor(tc)
 	}
 	
-	override getContext() {
-		parent.context
-	}
 }

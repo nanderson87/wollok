@@ -4,18 +4,18 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 @Accessors
-class VariableRef implements Expression {
-
-	val String name
-	val Expression parent
+class Assignment implements Expression {
 	
-	new(Expression parent, String name) {
+	val Expression parent
+	var Expression expression
+	var String variableName
+	
+	new(Expression parent) {
 		this.parent = parent
-		this.name = name
 	}
 	
 	override typeFor(TypeContext tc) {
-		tc.typeForVariable(name)
+		expression.typeFor(tc)
 	}
 	
 }

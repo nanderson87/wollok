@@ -1,8 +1,9 @@
 package org.uqbar.project.wollok.codeGenerator.model
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.project.wollok.codeGenerator.model.types.UnknownType
 import org.uqbar.project.wollok.codeGenerator.model.types.UnionType
+import org.uqbar.project.wollok.codeGenerator.model.types.UnknownType
+import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 @Accessors
 class Variable implements Expression{
@@ -20,22 +21,19 @@ class Variable implements Expression{
 	
 	def setInitialValue(Expression e){
 		initialValue = e
-		assignations.add(e)
+		if(e != null)
+			assignations.add(e)
 	}
 	
-	override getType() {
+	override typeFor(TypeContext tc) {
 		if(assignations.empty)
 			return new UnknownType
 		
 		if(assignations.size == 1){
-			return assignations.get(0).type
+			return assignations.get(0).typeFor(tc)
 		}
 		
-		return new UnionType(assignations.map[type])
-	}
-	
-	override getContext() {
-		parent.context
+		return new UnionType(assignations.map[typeFor(tc)])
 	}
 	
 }
