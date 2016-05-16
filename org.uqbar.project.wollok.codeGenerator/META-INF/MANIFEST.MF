@@ -26,4 +26,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: 
  org.uqbar.project.wollok.codeGenerator;uses:="org.eclipse.emf.ecore,org.uqbar.project.wollok.wollokDsl,org.uqbar.project.wollok.codeGenerator.model",
  org.uqbar.project.wollok.codeGenerator.model;uses:="org.uqbar.project.wollok.codeGenerator.model.types",
- org.uqbar.project.wollok.codeGenerator.model.types
+ org.uqbar.project.wollok.codeGenerator.model.types,
+ org.uqbar.project.wollok.codeGenerator.model.types.context
