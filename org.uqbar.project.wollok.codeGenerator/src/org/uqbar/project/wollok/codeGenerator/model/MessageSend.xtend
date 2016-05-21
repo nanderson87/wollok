@@ -2,7 +2,6 @@ package org.uqbar.project.wollok.codeGenerator.model
 
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.project.wollok.codeGenerator.model.types.NamedObjectType
 import org.uqbar.project.wollok.codeGenerator.model.types.NumericType
 import org.uqbar.project.wollok.codeGenerator.model.types.Type
 import org.uqbar.project.wollok.codeGenerator.model.types.context.MessageSentTypeContext
@@ -12,7 +11,7 @@ import static extension org.uqbar.project.wollok.codeGenerator.model.types.TypeE
 
 @Accessors
 class MessageSend implements Expression {
-	static val possibleStrategies = #[new NumbersOperationsStrategy, new NamedObjectReceiverStrategy]
+	static val possibleStrategies = #[new NumbersOperationsStrategy, new DefaultStrategy]
 
 	var Expression receiver
 	var String selector
@@ -60,23 +59,20 @@ class NumbersOperationsStrategy implements MessageSendStrategy {
 	override canApply(MessageSend send, MessageSentTypeContext tc) {
 		val originalTC = tc.parentContext
 		send.receiver.typeFor(originalTC).isNumericType && send.parameters.size == 1 &&
-			send.parameters.get(0).typeFor(originalTC).isNumericType
+			send.parameters.get(0).typeFor(originalTC).isNumericType && #["+", "/", "-", "*"].contains(send.selector)
 	}
 
 }
 
-class NamedObjectReceiverStrategy implements MessageSendStrategy {
+class DefaultStrategy implements MessageSendStrategy {
 
 	override type(MessageSend send, MessageSentTypeContext tc) {
-		val type = send.receiver.typeFor(tc.parentContext) as NamedObjectType
-		val obj = type.object
-		val method = obj.getMethodNamed(send.selector)
-
+		val method = tc.receiver.classDefinition.getMethodNamed(send.selector)
 		tc.method = method
 		method.typeFor(tc)
 	}
 
 	override canApply(MessageSend send, MessageSentTypeContext tc) {
-		send.receiver.typeFor(tc.parentContext).isNamedObject
+		true
 	}
 }

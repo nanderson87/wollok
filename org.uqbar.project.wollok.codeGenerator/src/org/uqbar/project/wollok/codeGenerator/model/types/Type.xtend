@@ -4,5 +4,5 @@ interface Type {
 }
 
 interface NativeType extends Type {
-	def NativeTypesEnum getNativeType()
+	def NativeTypesEnum getNativeType()	
 }

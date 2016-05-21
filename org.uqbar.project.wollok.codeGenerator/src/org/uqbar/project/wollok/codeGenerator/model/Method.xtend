@@ -5,9 +5,16 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 class Method extends AbstractMethodContext {
 
-	val Expression parent
+	val parameters = <Parameter>newArrayList
+	val ClassDefinition parent
+	var Boolean nativeMethod = false
 	
-	new(Expression parent) {
+	new(ClassDefinition parent) {
 		this.parent = parent
 	}
+	
+	def addParameter(Parameter parameter) {
+		parameters.add(parameter)
+	}
+	
 }

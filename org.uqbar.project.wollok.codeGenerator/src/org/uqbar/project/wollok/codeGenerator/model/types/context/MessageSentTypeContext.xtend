@@ -10,10 +10,12 @@ import static extension org.uqbar.project.wollok.codeGenerator.model.types.TypeE
 class MessageSentTypeContext implements TypeContext {
 	
 	var Context method 
-	val TypeContext receiver
+	val ClassTypeContext receiver
+	val Type selfType
 	val TypeContext parentContext 
 	
 	new(TypeContext parentContext, Type receiver){
+		this.selfType = receiver
 		this.receiver = receiver.asTypeContext(parentContext)
 		this.parentContext = parentContext
 	}
@@ -23,6 +25,14 @@ class MessageSentTypeContext implements TypeContext {
 			return method.getVariableNamed(name).typeFor(this)
 			
 		receiver.typeForVariable(name)
+	}
+	
+	override getSelfType() {
+		selfType
+	}
+	
+	override resolveClass(String name) {
+		parentContext.resolveClass(name)
 	}
 	
 }

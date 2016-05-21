@@ -17,5 +17,14 @@ class RootTypeContext implements TypeContext {
 	
 	override getParentContext() {
 		this
-	}	
+	}
+	
+	override getSelfType() {
+		throw new UnsupportedOperationException("There is no self in the context of the program")
+	}
+	
+	override resolveClass(String name) {
+		program.resolveWollokClass(name)
+	}
+	
 }
