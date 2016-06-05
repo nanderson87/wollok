@@ -3,7 +3,7 @@ package org.uqbar.project.wollok.codeGenerator.model.types
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
-class NumericType implements NativeType {
+class NumericType extends NativeType {
 	val NativeTypesEnum nativeType
 	
 	new(Number value){
@@ -24,5 +24,18 @@ class NumericType implements NativeType {
 	def dispatch typeName(Integer e) { NativeTypesEnum.INT }
 	def dispatch typeName(Long e) { NativeTypesEnum.INT }
 	def dispatch typeName(Short e) { NativeTypesEnum.INT }
+	
+	def dispatch doEquals(Object obj) {
+		false
+	}
+	
+	def dispatch doEquals(NumericType obj){
+		nativeType == obj.nativeType
+	}
+	
+	override doHashCode() {
+		nativeType.hashCode
+	}
+	
 }
 

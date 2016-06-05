@@ -1,11 +1,15 @@
 package org.uqbar.project.wollok.tests.codeGenerator
 
+import java.util.HashSet
+import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.Before
 import org.uqbar.project.wollok.codeGenerator.CodeAnalyzer
 import org.uqbar.project.wollok.codeGenerator.model.Expression
 import org.uqbar.project.wollok.codeGenerator.model.Program
 import org.uqbar.project.wollok.codeGenerator.model.types.NativeTypesEnum
+import org.uqbar.project.wollok.codeGenerator.model.types.Type
+import org.uqbar.project.wollok.codeGenerator.model.types.UnionType
 import org.uqbar.project.wollok.codeGenerator.model.types.context.RootTypeContext
 import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 import org.uqbar.project.wollok.tests.interpreter.AbstractWollokInterpreterTestCase
@@ -44,6 +48,19 @@ abstract class AbstractWollokCodeGeneratorTypeInfererTest extends AbstractWollok
 
 	def assertNativeTypeEquals(NativeTypesEnum expected, Expression e) {
 		assertEquals(expected, e.nativeType)
+	}
+
+	def assertTypeIs(Class<? extends Type> tipo, Expression e) {
+		if (!tipo.isInstance(e.type)) {
+			assertEquals(tipo, e.type.class)
+		}
+	}
+
+	def assertUnionTypeNatives(Set<NativeTypesEnum> types, Expression e) {
+		assertTypeIs(UnionType, e)
+		val r = new HashSet()
+		(e.type as UnionType).types.map[nativeType].forEach[r.add(it)]
+		assertEquals(new HashSet(types), r)
 	}
 
 }

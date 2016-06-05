@@ -16,6 +16,11 @@ class TypeExtensions {
 
 	static def dispatch isNamedObject(Type t) { false }
 
+	static def dispatch isUnionType(UnionType t) { true }
+
+	static def dispatch isUnionType(Type t) { false }
+
+
 	static def dispatch ClassTypeContext asTypeContext(Type t, TypeContext parentContext) {
 		throw new RuntimeException("Should be implemented?? for:" + t?.class.name)
 	}

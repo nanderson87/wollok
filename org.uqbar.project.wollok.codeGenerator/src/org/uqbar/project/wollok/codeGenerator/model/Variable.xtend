@@ -1,7 +1,7 @@
 package org.uqbar.project.wollok.codeGenerator.model
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.project.wollok.codeGenerator.model.types.UnionType
+import org.uqbar.project.wollok.codeGenerator.model.types.Type
 import org.uqbar.project.wollok.codeGenerator.model.types.UnknownType
 import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
@@ -26,14 +26,8 @@ class Variable implements Expression{
 	}
 	
 	override typeFor(TypeContext tc) {
-		if(assignations.empty)
-			return new UnknownType
-		
-		if(assignations.size == 1){
-			return assignations.get(0).typeFor(tc)
-		}
-		
-		return new UnionType(assignations.map[typeFor(tc)])
+		val types = assignations.map[typeFor(tc)]
+		types.fold(new UnknownType) [ Type t1, t2 | t1.combineWith(t2)]
 	}
 	
 }
