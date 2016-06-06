@@ -4,7 +4,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.project.wollok.codeGenerator.CodeAnalyzer
 
 @Accessors
-class Program extends AbstractMethodContext {	
+class Program extends AbstractCompositeContext {	
 	val classes = <String,ClassDefinition> newHashMap
 	val CodeAnalyzer analyzer
 	

@@ -19,7 +19,7 @@ public enum NativeTypesEnum {
 	},
 	
 	STRING(WollokDSK.STRING);
-
+	
 	private String wollokClassName;
 	
 	private NativeTypesEnum(String wollokClassName){

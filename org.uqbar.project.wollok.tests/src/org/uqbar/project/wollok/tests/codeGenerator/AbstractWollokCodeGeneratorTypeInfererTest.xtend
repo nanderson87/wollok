@@ -5,8 +5,10 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.Before
 import org.uqbar.project.wollok.codeGenerator.CodeAnalyzer
+import org.uqbar.project.wollok.codeGenerator.model.ClassDefinition
 import org.uqbar.project.wollok.codeGenerator.model.Expression
 import org.uqbar.project.wollok.codeGenerator.model.Program
+import org.uqbar.project.wollok.codeGenerator.model.types.ClassType
 import org.uqbar.project.wollok.codeGenerator.model.types.NativeTypesEnum
 import org.uqbar.project.wollok.codeGenerator.model.types.Type
 import org.uqbar.project.wollok.codeGenerator.model.types.UnionType
@@ -56,6 +58,11 @@ abstract class AbstractWollokCodeGeneratorTypeInfererTest extends AbstractWollok
 		}
 	}
 
+	def assertUnionType(Set<Type> types, Expression e){
+		assertTypeIs(UnionType, e)
+		assertEquals(types, (e.type as UnionType).types)
+	}
+
 	def assertUnionTypeNatives(Set<NativeTypesEnum> types, Expression e) {
 		assertTypeIs(UnionType, e)
 		val r = new HashSet()
@@ -63,4 +70,8 @@ abstract class AbstractWollokCodeGeneratorTypeInfererTest extends AbstractWollok
 		assertEquals(new HashSet(types), r)
 	}
 
+	def assertClassType(ClassDefinition classDefinition, Expression e){
+		assertTypeIs(ClassType, e)
+		assertEquals(classDefinition, (e.type as ClassType).classDefinition)
+	}
 }

@@ -2,6 +2,7 @@ package org.uqbar.project.wollok.codeGenerator
 
 import org.eclipse.emf.ecore.EObject
 import org.uqbar.project.wollok.codeGenerator.model.Assignment
+import org.uqbar.project.wollok.codeGenerator.model.Block
 import org.uqbar.project.wollok.codeGenerator.model.ClassDefinition
 import org.uqbar.project.wollok.codeGenerator.model.ConstructorCall
 import org.uqbar.project.wollok.codeGenerator.model.Context
@@ -10,6 +11,7 @@ import org.uqbar.project.wollok.codeGenerator.model.IfExpression
 import org.uqbar.project.wollok.codeGenerator.model.MessageSend
 import org.uqbar.project.wollok.codeGenerator.model.Method
 import org.uqbar.project.wollok.codeGenerator.model.NamedObject
+import org.uqbar.project.wollok.codeGenerator.model.NativeMethod
 import org.uqbar.project.wollok.codeGenerator.model.NumberLiteral
 import org.uqbar.project.wollok.codeGenerator.model.Parameter
 import org.uqbar.project.wollok.codeGenerator.model.Program
@@ -41,7 +43,6 @@ import org.uqbar.project.wollok.wollokDsl.impl.WThrowImpl
 
 import static extension org.uqbar.project.wollok.codeGenerator.ModelExtensions.*
 import static extension org.uqbar.project.wollok.model.WollokModelExtensions.*
-import org.uqbar.project.wollok.codeGenerator.model.NativeMethod
 
 class CodeAnalyzer {
 	val program = new Program(this)
@@ -132,9 +133,15 @@ class CodeAnalyzer {
 	}
 	
 	def dispatch Expression analyze(WBlockExpression b, Method parent){
-		b.expressions.forEach[ e | e.analyze(parent)]
+		b.expressions.forEach[ e | parent.operations.add(e.analyze(parent))]
 		parent
-	}	
+	}
+
+	def dispatch Expression analyze(WBlockExpression b, Expression parent){
+		new Block(parent) => [ blk | 
+			b.expressions.forEach[e | blk.operations.add(e.analyze(parent))]
+		]
+	}
 	
 	def dispatch Expression analyze(WClass c, Program parent){
 		val className = c.fqn
@@ -150,6 +157,7 @@ class CodeAnalyzer {
 		
 		new ClassDefinition(parent, className, superClass) => [
 			c.members.forEach[ e | e.analyze(it)]
+//			parent.classes.put(className, it)
 		]
 	}
 	
@@ -162,12 +170,17 @@ class CodeAnalyzer {
 	}
 	
 	def dispatch Expression analyze(WConstructorCall cc, Expression parent){
-		new ConstructorCall(parent) => [ 
+		new ConstructorCall(parent, cc.classRef.fqn) => [ 
+			arguments = cc.arguments.map[ e | e.analyze(it)]
 		]
 	}
 	
 	def dispatch Expression analyze(WIfExpression ifExpr, Expression parent){
-		new IfExpression(parent)
+		new IfExpression(parent) => [ ie |
+			ie.condition = ifExpr.condition.analyze(ie)
+			ie.trueSide = ifExpr.then.analyze(ie)
+			ie.falseSide = ifExpr.^else?.analyze(ie)
+		]
 	}
 	
 	def dispatch Expression analyze(WStringLiteral lit, Expression parent){

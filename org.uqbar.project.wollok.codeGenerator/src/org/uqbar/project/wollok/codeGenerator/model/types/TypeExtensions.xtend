@@ -29,6 +29,10 @@ class TypeExtensions {
 		new ClassTypeContext(parentContext, t.object.classDefinition)
 	}
 
+	static def dispatch ClassTypeContext asTypeContext(ClassType t, TypeContext parentContext) {
+		new ClassTypeContext(parentContext, t.classDefinition)
+	}
+
 	static def dispatch ClassTypeContext asTypeContext(NativeType t, TypeContext parentContext) {
 		new ClassTypeContext(parentContext, parentContext.resolveClass(t.nativeType.wollokClassName))
 	}

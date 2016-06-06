@@ -1,7 +1,6 @@
 package org.uqbar.project.wollok.codeGenerator.model
 
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.project.wollok.codeGenerator.model.types.Type
 import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 interface Context extends Expression {
@@ -35,10 +34,10 @@ interface MethodContext extends Context {
 }
 
 @Accessors
-abstract class AbstractMethodContext extends AbstractContext implements MethodContext {
+abstract class AbstractCompositeContext extends AbstractContext implements MethodContext {
 	val operations = <Expression>newArrayList();
 	val returnVariable = new Variable(this, "_return");
-	
+
 	override typeFor(TypeContext tc) {
 		returnVariable.typeFor(tc)
 	}

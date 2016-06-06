@@ -4,7 +4,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 @Accessors
-class ClassDefinition extends AbstractMethodContext {
+class ClassDefinition extends AbstractCompositeContext {
 
 	val Program parent 
 	val String name
