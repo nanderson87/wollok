@@ -20,7 +20,7 @@ class ClassTest extends AbstractWollokCodeGeneratorTypeInfererTest {
 			}
 		'''.parseAndPerformAnalysis
 
-		assertClassType(pgm.resolveWollokClass("__synthetic0.MiClase"), pgm.variables.get("x"))
+		assertClassType(pgm.resolveWollokClass("MiClase".classNameWithSyntheticPackage), pgm.variables.get("x"))
 		assertNativeTypeEquals(NativeTypesEnum.INT, pgm.returnVariable)
 	}
 

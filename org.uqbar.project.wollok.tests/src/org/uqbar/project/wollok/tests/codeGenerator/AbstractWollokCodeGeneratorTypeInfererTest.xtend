@@ -1,6 +1,7 @@
 package org.uqbar.project.wollok.tests.codeGenerator
 
 import java.util.HashSet
+
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.Before
@@ -18,6 +19,7 @@ import org.uqbar.project.wollok.tests.interpreter.AbstractWollokInterpreterTestC
 import org.uqbar.project.wollok.wollokDsl.WFile
 
 import static extension org.uqbar.project.wollok.codeGenerator.model.types.TypeExtensions.*
+import static extension org.uqbar.project.wollok.model.WollokModelExtensions.*
 
 @Accessors
 abstract class AbstractWollokCodeGeneratorTypeInfererTest extends AbstractWollokInterpreterTestCase {
@@ -73,5 +75,9 @@ abstract class AbstractWollokCodeGeneratorTypeInfererTest extends AbstractWollok
 	def assertClassType(ClassDefinition classDefinition, Expression e){
 		assertTypeIs(ClassType, e)
 		assertEquals(classDefinition, (e.type as ClassType).classDefinition)
+	}
+	
+	def classNameWithSyntheticPackage(String className){
+		model.fileName + "." + className
 	}
 }

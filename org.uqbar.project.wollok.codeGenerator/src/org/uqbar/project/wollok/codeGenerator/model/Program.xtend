@@ -18,7 +18,7 @@ class Program extends AbstractCompositeContext {
 	
 	def ClassDefinition resolveWollokClass(String name) {
 		if(!classes.containsKey(name)){
-			classes.put(name, analyzer.tryToResolve(name))
+			analyzer.tryToResolve(name)
 		}
 		
 		classes.get(name)

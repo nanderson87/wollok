@@ -157,7 +157,7 @@ class CodeAnalyzer {
 		
 		new ClassDefinition(parent, className, superClass) => [
 			c.members.forEach[ e | e.analyze(it)]
-//			parent.classes.put(className, it)
+			parent.storeWollokClass(className, it)
 		]
 	}
 	
