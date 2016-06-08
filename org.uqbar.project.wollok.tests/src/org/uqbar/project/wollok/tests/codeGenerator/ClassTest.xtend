@@ -24,4 +24,57 @@ class ClassTest extends AbstractWollokCodeGeneratorTypeInfererTest {
 		assertNativeTypeEquals(NativeTypesEnum.INT, pgm.returnVariable)
 	}
 
+	@Test
+	def void classWithSubclasses() {
+		'''
+			class SuperClass {
+				method yy(){
+					return 32
+				}
+			}
+
+			class MiClase inherits SuperClass{
+				method xx(){
+					return self.yy()
+				}
+			}
+
+			program p {
+				var x = new MiClase()
+				return x.xx()
+			}
+		'''.parseAndPerformAnalysis
+
+		assertClassType(pgm.resolveWollokClass("MiClase".classNameWithSyntheticPackage), pgm.variables.get("x"))
+		assertNativeTypeEquals(NativeTypesEnum.INT, pgm.returnVariable)
+	}
+
+	@Test
+	def void methodInSuperclass() {
+		'''
+			class SuperClass {
+				method yy(){
+					return 32
+				}
+				method zz(){
+					return "asdad"
+				}
+			}
+
+			class MiClase inherits SuperClass{
+				method xx(){
+					return self.yy()
+				}
+			}
+
+			program p {
+				var x = new MiClase()
+				return x.zz()
+			}
+		'''.parseAndPerformAnalysis
+
+		assertClassType(pgm.resolveWollokClass("MiClase".classNameWithSyntheticPackage), pgm.variables.get("x"))
+		assertNativeTypeEquals(NativeTypesEnum.STRING, pgm.returnVariable)
+	}
+
 }

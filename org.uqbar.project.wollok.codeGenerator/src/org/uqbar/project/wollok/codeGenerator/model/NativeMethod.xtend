@@ -18,7 +18,7 @@ class NativeMethod extends Method {
 		this.numberOfParamters = numberOfParameters
 	}
 
-	override typeFor(TypeContext tc) {
+	override returnTypeFor(TypeContext tc) {
 		val javaClassName = DefaultNativeObjectFactory.wollokToJavaFQN(parent.name)
 		val c = Class.forName(javaClassName)
 		val m = c.methods.findFirst [

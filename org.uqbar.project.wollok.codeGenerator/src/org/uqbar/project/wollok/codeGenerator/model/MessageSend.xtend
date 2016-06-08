@@ -69,7 +69,7 @@ class DefaultStrategy implements MessageSendStrategy {
 	override type(MessageSend send, MessageSentTypeContext tc) {
 		val method = tc.receiver.classDefinition.getMethodNamed(send.selector)
 		tc.method = method
-		method.typeFor(tc)
+		method.returnTypeFor(tc)
 	}
 
 	override canApply(MessageSend send, MessageSentTypeContext tc) {

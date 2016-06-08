@@ -1,6 +1,7 @@
 package org.uqbar.project.wollok.codeGenerator.model
 
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.project.wollok.codeGenerator.model.types.Type
 import org.uqbar.project.wollok.codeGenerator.model.types.context.TypeContext
 
 interface Context extends Expression {
@@ -31,6 +32,7 @@ abstract class AbstractContext implements Context{
 
 interface MethodContext extends Context {
 	def Variable getReturnVariable()
+	def Type returnTypeFor(TypeContext tc)
 }
 
 @Accessors
@@ -39,6 +41,10 @@ abstract class AbstractCompositeContext extends AbstractContext implements Metho
 	val returnVariable = new Variable(this, "_return");
 
 	override typeFor(TypeContext tc) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	override returnTypeFor(TypeContext tc){
 		returnVariable.typeFor(tc)
 	}
 }
