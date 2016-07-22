@@ -49,6 +49,15 @@ abstract class AbstractWollokInterpreterTestCase extends Assert {
 	def interpretPropagatingErrors(CharSequence programAsString) {
 		interpretPropagatingErrors(newArrayList(null as String -> programAsString.toString))
 	}
+	
+	def test(CharSequence testCode) {
+	    '''
+	    program a {
+    		«testCode»
+	    } 
+    	'''.interpretPropagatingErrors
+	}
+	
 
 	def interpretPropagatingErrors(String... programAsString) {
 		interpretPropagatingErrors(programAsString.map[null -> it])
@@ -56,6 +65,10 @@ abstract class AbstractWollokInterpreterTestCase extends Assert {
 
 	def interpretPropagatingErrors(Pair<String, String>... programAsString) {
 		interpret(true, programAsString)
+	}
+
+	def interpretPropagatingErrorsWithoutStaticChecks(CharSequence programAsString) {
+		interpretPropagatingErrorsWithoutStaticChecks(newArrayList(null as String -> programAsString.toString))
 	}
 
 	def interpretPropagatingErrorsWithoutStaticChecks(String... programAsString) {
@@ -90,7 +103,7 @@ abstract class AbstractWollokInterpreterTestCase extends Assert {
 					it.interpret(propagatingErrors)
 				catch (WollokProgramExceptionWrapper e) {
 					println("MESSAGE = " + e.wollokException.resolve("message"))
-					fail(e.wollokException.resolve("message") + "\n" + e.wollokStackTrace)
+					fail(e.wollokException.resolve("message") + System.lineSeparator + e.wollokStackTrace)
 					println("after fail")
 				}
 			]
@@ -137,4 +150,5 @@ abstract class AbstractWollokInterpreterTestCase extends Assert {
 		}
 		
 	}
+	
 }
