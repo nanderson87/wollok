@@ -1,8 +1,10 @@
 package org.uqbar.project.wollok.codeGenerator
 
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.uqbar.project.wollok.codeGenerator.model.Assignment
 import org.uqbar.project.wollok.codeGenerator.model.Block
+import org.uqbar.project.wollok.codeGenerator.model.BooleanLiteral
 import org.uqbar.project.wollok.codeGenerator.model.ClassDefinition
 import org.uqbar.project.wollok.codeGenerator.model.ConstructorCall
 import org.uqbar.project.wollok.codeGenerator.model.Context
@@ -12,6 +14,7 @@ import org.uqbar.project.wollok.codeGenerator.model.MessageSend
 import org.uqbar.project.wollok.codeGenerator.model.Method
 import org.uqbar.project.wollok.codeGenerator.model.NamedObject
 import org.uqbar.project.wollok.codeGenerator.model.NativeMethod
+import org.uqbar.project.wollok.codeGenerator.model.Null
 import org.uqbar.project.wollok.codeGenerator.model.NumberLiteral
 import org.uqbar.project.wollok.codeGenerator.model.Parameter
 import org.uqbar.project.wollok.codeGenerator.model.Program
@@ -23,6 +26,7 @@ import org.uqbar.project.wollok.interpreter.WollokClassFinder
 import org.uqbar.project.wollok.wollokDsl.WAssignment
 import org.uqbar.project.wollok.wollokDsl.WBinaryOperation
 import org.uqbar.project.wollok.wollokDsl.WBlockExpression
+import org.uqbar.project.wollok.wollokDsl.WBooleanLiteral
 import org.uqbar.project.wollok.wollokDsl.WClass
 import org.uqbar.project.wollok.wollokDsl.WConstructorCall
 import org.uqbar.project.wollok.wollokDsl.WFile
@@ -30,6 +34,7 @@ import org.uqbar.project.wollok.wollokDsl.WIfExpression
 import org.uqbar.project.wollok.wollokDsl.WMemberFeatureCall
 import org.uqbar.project.wollok.wollokDsl.WMethodDeclaration
 import org.uqbar.project.wollok.wollokDsl.WNamedObject
+import org.uqbar.project.wollok.wollokDsl.WNullLiteral
 import org.uqbar.project.wollok.wollokDsl.WNumberLiteral
 import org.uqbar.project.wollok.wollokDsl.WParameter
 import org.uqbar.project.wollok.wollokDsl.WProgram
@@ -56,7 +61,9 @@ class CodeAnalyzer {
 	}
 
 	def dispatch Expression analyze(EObject o, Expression parent) {
-		throw new RuntimeException("This should be implemented: " + o?.class.name)
+		val node = NodeModelUtils.getNode(o);
+		
+		throw new RuntimeException("This should be implemented: " + o?.class.name + " filename: " + o.file.URI.toString + " Line:" + node.startLine)
 	}
 
 	def dispatch Expression analyze(WNumberLiteral o, Expression parent) { new NumberLiteral(parent, o.value) }
@@ -66,6 +73,14 @@ class CodeAnalyzer {
 			o.members.forEach[ e | e.analyze(it.classDefinition) ]	
 			parent.putVariableNamed(o.name, new Variable(parent, o.name) =>[ v | v.initialValue = it ])
 		]
+	}
+	
+	def dispatch Expression analyze(WBooleanLiteral bl, Expression parent){
+		new BooleanLiteral(parent, bl.isTrue)
+	}
+	
+	def dispatch Expression analyze(WNullLiteral nl, Expression parent){
+		new Null(parent)
 	}
 
 	def dispatch Expression analyze(WVariableDeclaration vd, Context parent) {

@@ -78,6 +78,6 @@ abstract class AbstractWollokCodeGeneratorTypeInfererTest extends AbstractWollok
 	}
 	
 	def classNameWithSyntheticPackage(String className){
-		model.fileName + "." + className
+		model.implicitPackage + "." + className
 	}
 }
