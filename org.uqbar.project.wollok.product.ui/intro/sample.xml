@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<introContent>
+  	<extensionContent id="orguqbarprojectwollokproductui-introExtension" style="css/sample.css" name="Wollok" path="overview/@">
+		<group style-id="content-group" id="orguqbarprojectwollokproductui-introLink-group">
+       		<link label="Wollok" url="http://wollok.org" id="orguqbarprojectwollokproductui-introLink" style-id="content-link">
+          		<text>Visit Wollok homepage</text>
+       		</link>
+       	</group>
+  	</extensionContent>
+</introContent>

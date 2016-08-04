@@ -8,5 +8,12 @@
             class="org.uqbar.project.wollok.product.ui.startup.RemoveWizardsStartup">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/sample.xml">
+      </configExtension>
+   </extension>
 
 </plugin>
