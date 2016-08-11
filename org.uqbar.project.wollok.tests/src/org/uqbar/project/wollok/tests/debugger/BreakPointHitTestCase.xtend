@@ -14,8 +14,7 @@ class BreakPointHitTestCase extends AbstractXDebuggingTestCase {
 // I'm ignoring this temporarly to fix travis build
 // some how it break trying to link the sockets :(
 
-	@Test	
-	@Ignore // damn travis
+	@Test
 	def void hittingABreakPointShouldRiseAndEvent() {
 		'''
 			program abc {
@@ -47,7 +46,6 @@ class BreakPointHitTestCase extends AbstractXDebuggingTestCase {
 	}
 	
 	@Test
-	@Ignore // damn travis
 	def void listShouldHaveElements() {
 		'''
 			program abc {
