@@ -24,12 +24,12 @@
 		<!-- 
 			It is not the same version as the lib in launcher project (debugger)
 			But it is the only one I could find in maven
-		 -->
 		<dependency>
 		    <groupId>com.tascape.qa</groupId>
 		    <artifactId>lipermi</artifactId>
 		    <version>1.0.1</version>
 		</dependency>
+-->
 		
 	</dependencies>
 	
