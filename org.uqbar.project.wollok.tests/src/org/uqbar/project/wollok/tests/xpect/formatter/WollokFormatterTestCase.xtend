@@ -55,7 +55,7 @@ class WollokFormatterTestCase extends AbstractXtextTests {
     }
     
    	def assertFormatting(String program, String expected) {
-   		println(formatCode(program))
+//   		println(formatCode(program))
 		Assert.assertEquals(expected, formatCode(program));		  
 	}
     
