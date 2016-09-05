@@ -1,5 +1,7 @@
 package org.uqbar.project.wollok.launch
 
+import java.io.File
+import java.io.FileWriter
 import java.util.ArrayList
 import java.util.List
 import org.apache.commons.cli.CommandLine
@@ -7,29 +9,21 @@ import org.apache.commons.cli.GnuParser
 import org.apache.commons.cli.Option
 import org.apache.commons.cli.Options
 import org.eclipse.xtend.lib.annotations.Accessors
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileWriter
 
 /**
  * @author jfernandes
  * @author tesonep
  */
+@Accessors
 class WollokLauncherParameters {
-	@Accessors
 	Integer requestsPort = null
-	@Accessors
 	Integer eventsPort = null
-	@Accessors
 	List<String> wollokFiles = new ArrayList();
-	@Accessors
 	boolean hasRepl = false
-	@Accessors
 	Integer testPort = null
-	@Accessors
 	boolean jsonOutput = false
-	@Accessors
 	boolean tests = false
+	boolean hasValidations = true;	
 	
 	def build() {
 		val sb = new StringBuilder
@@ -39,6 +33,7 @@ class WollokLauncherParameters {
 		if (testPort != null) sb.append("-testPort " + testPort.toString).append(" ")
 		if (tests) sb.append("-t ")
 		if (jsonOutput) sb.append("-jsonOutput ")
+		if (!hasValidations) sb.append("-disableValidations")
 		wollokFiles.forEach [ sb.append(it).append(" ") ]
 		sb.toString
 	}
@@ -55,6 +50,8 @@ class WollokLauncherParameters {
 
 		requestsPort = parseParameter(cmdLine, "requestsPort")
 		eventsPort = parseParameter(cmdLine, "eventsPort")
+		
+		hasValidations = !cmdLine.hasOption("disableValidations")
 
 		if ((requestsPort == 0 && eventsPort != 0) || (requestsPort != 0 && eventsPort == 0)) {
 			throw new RuntimeException("Both RequestsPort and EventsPort should be informed")
@@ -108,10 +105,11 @@ class WollokLauncherParameters {
 			addOption(new Option("t", "Running tests") => [longOpt = "tests"])
 			
 			addOption(new Option("jsonOutput", "JSON test report output"))
+			addOption(new Option("disableValidations", "Disables all validations when loading the program"))
 			
 			add("testPort", "Server port for tests", "port", 1)
 			add("requestsPort", "Request ports", "port", 1)
-			add("eventsPort", "Events ports", "port", 1)			
+			add("eventsPort", "Events ports", "port", 1)
 		]
 	}
 	

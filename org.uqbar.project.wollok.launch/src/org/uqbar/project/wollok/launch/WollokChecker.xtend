@@ -29,6 +29,7 @@ import org.uqbar.project.wollok.wollokDsl.WFile
 class WollokChecker {
 	protected static Logger log = Logger.getLogger(WollokLauncher)
 	var Injector injector
+	var WollokLauncherParameters parameters
 	
 	def static void main(String[] args) {
 		new WollokChecker().doMain(args)
@@ -46,7 +47,7 @@ class WollokChecker {
 				System.exit(0)
 			}
 			
-			val parameters = new WollokLauncherParameters().parse(args)
+			parameters = new WollokLauncherParameters().parse(args)
 
 			injector = new WollokLauncherSetup(parameters).createInjectorAndDoEMFRegistration
 
@@ -98,8 +99,10 @@ class WollokChecker {
 	}
 	
 	def validate(Injector injector, Resource resource) {
-		val handler = injector.getInstance(WollokLauncherIssueHandler)
-		this.validate(injector,resource,[handler.handleIssue(it)],[ handler.finished ; System.exit(-1) ])
+		if(parameters.hasValidations){
+			val handler = injector.getInstance(WollokLauncherIssueHandler)
+			this.validate(injector,resource,[handler.handleIssue(it)],[ handler.finished ; System.exit(-1) ])
+		}
 	}
 	
 	def validate(Injector injector, Resource resource, Procedure1<? super Issue> issueHandler, Procedure1<Iterable<Issue>> after) {
